@@ -18,16 +18,18 @@ pipeline {
             }
         }
 
-        stage('Install Frontend Dependencies') {
-        steps {
-            dir('frontend') {
-                sh '''
-                    npm install
-                    npm install -g vite
-                '''
-            }
+       stage('Install Frontend Dependencies') {
+    steps {
+        dir('frontend') {
+            sh '''
+              rm -rf node_modules package-lock.json
+              npm install
+              ls -la node_modules/.bin
+            '''
+        }
         }
     }
+
 
       stage('Build Frontend') {
   steps {
