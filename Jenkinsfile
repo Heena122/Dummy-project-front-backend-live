@@ -50,19 +50,19 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
-    steps {
-        sshagent (credentials: ['your-ssh-cred-id']) {
-            sh '''
-                echo "Deploying frontend..."
-                scp -o StrictHostKeyChecking=no -r frontend/build/* ubuntu@13.52.240.167:/var/www/html/
+//         stage('Deploy') {
+//     steps {
+//         sshagent (credentials: ['your-ssh-cred-id']) {
+//             sh '''
+//                 echo "Deploying frontend..."
+//                 scp -o StrictHostKeyChecking=no -r frontend/build/* ubuntu@13.52.240.167:/var/www/html/
 
-                echo "Deploying backend..."
-                scp -o StrictHostKeyChecking=no -r backend/* ubuntu@13.52.240.167:/home/ubuntu/backend/
-            '''
-        }
-    }
-}
+//                 echo "Deploying backend..."
+//                 scp -o StrictHostKeyChecking=no -r backend/* ubuntu@13.52.240.167:/home/ubuntu/backend/
+//             '''
+//         }
+//     }
+// }
 
         // stage('Deploy') {
         //     steps {
