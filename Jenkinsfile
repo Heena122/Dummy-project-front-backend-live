@@ -3,11 +3,10 @@ pipeline {
 
     environment {
         NODE_ENV = 'production'
-        // updates
     }
 
     tools {
-        nodejs 'NodeJS_18'
+        nodejs 'NodeJS_18'  // name must match your Jenkins NodeJS tool config ghh
     }
 
     stages {
@@ -20,12 +19,15 @@ pipeline {
         }
 
         stage('Install Frontend Dependencies') {
-            steps {
-                dir('frontend') {
-                    sh 'npm install'
-                }
+        steps {
+            dir('frontend') {
+                sh '''
+                    npm install
+                    npm install -g vite
+                '''
             }
         }
+    }
 
         stage('Build Frontend') {
             steps {
@@ -46,28 +48,23 @@ pipeline {
         stage('Test Backend') {
             steps {
                 dir('backend') {
-                    sh 'npm test || true' 
+                    sh 'npm test'  // optional: replace or remove if no tests
                 }
             }
         }
 
         stage('Deploy') {
-            steps {
-                sh '''
-                    echo "🚀 Deploying frontend to /var/www/html..."
-                    sudo rm -rf /var/www/html/*
-                    sudo cp -r frontend/build/* /var/www/html/
+    steps {
+        sh '''
+            echo "Deploying frontend to /var/www/html..."
+            sudo cp -r frontend/build/* /var/www/html/
 
-                    echo "🚀 Deploying backend to /home/ubuntu/backend/..."
-                    sudo mkdir -p /home/ubuntu/backend/
-                    sudo cp -r backend/* /home/ubuntu/backend/
-
-                    echo "✅ Restarting backend with PM2 (if used)..."
-                    cd /home/ubuntu/backend/
-                    pm2 restart index.js --name backend || pm2 start index.js --name backend
-                '''
-            }
-        }
+            echo "Deploying backend to /home/ubuntu/backend/..."
+            sudo mkdir -p /home/ubuntu/backend/
+            sudo cp -r backend/* /home/ubuntu/backend/
+        '''
+    }
+}      
     }
 
     post {
