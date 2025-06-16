@@ -50,6 +50,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy') {
+    steps {
+        sh '''
+            echo "Deploying frontend to /var/www/html..."
+            sudo cp -r frontend/build/* /var/www/html/
+
+            echo "Deploying backend to /home/ubuntu/backend/..."
+            sudo mkdir -p /home/ubuntu/backend/
+            sudo cp -r backend/* /home/ubuntu/backend/
+        '''
+    }
+}
+
 //         stage('Deploy') {
 //     steps {
 //         sshagent (credentials: ['your-ssh-cred-id']) {
@@ -64,14 +78,7 @@ pipeline {
 //     }
 // }
 
-        // stage('Deploy') {
-        //     steps {
-        //         echo 'Deploy step goes here...'
-        //         // Example:
-        //         // sh 'scp -r backend/* user@server:/path/to/backend'
-        //         // sh 'scp -r frontend/build/* user@server:/var/www/html'
-        //     }
-        // }
+      
     }
 
     post {
