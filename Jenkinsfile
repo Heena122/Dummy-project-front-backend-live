@@ -29,13 +29,15 @@ pipeline {
         }
     }
 
-        stage('Build Frontend') {
-            steps {
-                dir('frontend') {
-                    sh 'npm run build'
-                }
-            }
-        }
+      stage('Build Frontend') {
+  steps {
+    dir('frontend') {
+      sh 'npm install'
+      sh './node_modules/.bin/vite build'
+    }
+    }
+    }
+
 
         stage('Install Backend Dependencies') {
             steps {
